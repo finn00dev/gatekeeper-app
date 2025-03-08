@@ -1,0 +1,10 @@
+<game-page 
+	*ngIf="gameInProgress && dailyArtist"
+	[dailyArtist]="dailyArtist"
+	(gameEnd)="navigateToEndPage($event)">
+</game-page>
+
+<end-page
+	*ngIf="!gameInProgress"
+	[result]="gameResults">
+</end-page>

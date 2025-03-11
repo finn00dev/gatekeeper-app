@@ -1,0 +1,66 @@
+.container {
+	margin: 30px;
+	height: 100%;
+
+	display: flex;
+	flex-direction: column;
+	// flex-wrap: wrap;
+	justify-content: flex-start;
+	align-items: center;
+
+	p-autocomplete {
+		width: 100%;
+	}
+}
+
+.name-three-title {
+  color: #238380;
+	font-size: 36px;
+	text-align: center;
+	line-height: 100%;
+
+	margin-top: 20px;
+	margin-bottom: 40px;
+}
+
+.guess-status {
+	span {
+		font-size: 32px;
+	}
+
+	&-text {
+		color: #238380;
+		font-size: 18px;
+		text-align: center;
+		letter-spacing: 2px;
+
+		margin-top: 0px;
+		margin-bottom: 0px;
+	}
+}
+
+.guess-list {
+	margin-top: 50px;
+	margin-bottom: 50px;
+	width: 100%;
+	min-height: 280px;
+
+	song-card {
+		width: 100%;
+	}
+}
+
+.guess-input {
+	height: 50px;
+	width: 100%;
+	filter: drop-shadow(0px 8px 5px #00000050);
+
+	.p-inputtext {
+		width: 100%;
+		border-radius: 15px;
+		border: none;
+
+		font-family: "Rakkas", serif;
+		font-style: normal;
+	}
+}

@@ -1,0 +1,62 @@
+.container {
+	margin: 30px;
+	height: 100%;
+
+	display: flex;
+	flex-direction: column;
+	// flex-wrap: wrap;
+	justify-content: flex-start;
+	align-items: center;
+
+	.end-prompt {
+		max-width: 400px;
+		width: 100%;
+
+		margin-top: 102px;
+		margin-bottom: 0px;
+		line-height: 100%;
+
+		color: #218380;
+		font-size: 48px;
+	}
+
+	.end-stats {
+		max-width: 400px;
+		width: 100%;
+		
+		margin-top: 60px;
+		margin-bottom: 60px;
+		line-height: 100%;
+
+		color: #218380;
+		font-size: 36px;
+
+	}
+
+	.score-section {
+		text-align: center;
+		.date {
+			color: #218380;
+			font-size: 24px;
+			letter-spacing: 1px;
+			
+			margin-bottom: 0;
+		}
+		.emojis {
+			font-size: 32px;
+		}
+	}
+
+	.share-button {
+		width: 100%;
+		border-radius: 15px !important;
+		height: 55px;
+		background-color: #1C6361 !important;
+		color: white !important;
+		margin-top: 30px;
+	
+		span {
+			font-size: 24px;
+		}
+	}
+}

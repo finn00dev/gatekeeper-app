@@ -1,19 +1,31 @@
-<div *ngIf="dailyArtist">
-  {{dailyArtist.name}}
-</div>
+<div class="container">
+	<h6 *ngIf="dailyArtist" class="name-three-title">
+		Name 3 {{dailyArtist.name}} songs.
+	</h6>
 
-<div *ngFor="let value of guessResults; index as i">
-	<p *ngIf="value">✅</p>
-	<p *ngIf="!value">❌</p>
-	<p>
-			{{ guesses[i] }}
-	</p>
+	<div class="guess-status">
+		<span>
+			{{ guessEmojis }}
+		</span>
+		<p class="guess-status-text">Guesses</p>
+	</div>
+	
+	<div class="guess-list">
+		<div *ngFor="let value of guessResults; index as i" class="guess-list-item">
+			<song-card
+				[listNo]="i + 1"
+				[value]="value"
+				[songName]="guesses[i]">
+			</song-card>
+		</div>
+	</div>
+	
+	<!-- <input type="text" pInputText [(ngModel)]="guessText" (keydown.enter)="guessSong()"/> -->
+	<p-autocomplete 
+		[(ngModel)]="guessText"
+		styleClass="guess-input"
+		[delay]="1000" 
+		[suggestions]="autoSuggestions" 
+		(completeMethod)="fillAutoComplete($event)"
+		(onSelect)="guessSong()"/>
 </div>
-
-<!-- <input type="text" pInputText [(ngModel)]="guessText" (keydown.enter)="guessSong()"/> -->
-<p-autocomplete 
-	[(ngModel)]="guessText"
-	[delay]="1000" 
-	[suggestions]="autoSuggestions" 
-	(completeMethod)="fillAutoComplete($event)"
-	(onSelect)="guessSong()"/>

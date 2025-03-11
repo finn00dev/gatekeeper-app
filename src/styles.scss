@@ -1,1 +1,32 @@
 /* You can add global styles to this file, and also import other style files */
+
+@font-face {
+  font-family: Rakkas;
+  src: url("./assets/fonts/Rakkas-Regular.ttf") format("truetype");
+}
+
+html {
+  background-color: #F5F6B8;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  display: block;
+}
+
+p-button {
+  width: 100%
+}
+
+h1, 
+h2, 
+h3, 
+h4, 
+h5, 
+h6, 
+p, 
+span {
+	font-family: "Rakkas", serif;
+	font-style: normal;
+}

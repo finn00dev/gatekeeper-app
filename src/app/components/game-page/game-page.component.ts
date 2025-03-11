@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { ArtistService } from '../../service/artist/artist.service';
 import { Artist } from '../../model/artist.model';
 import { CommonModule, DatePipe } from '@angular/common';
@@ -6,6 +6,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { GameResult } from '../../model/game-result.model';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { CardModule } from 'primeng/card';
+import { SongCardComponent } from '../song-card/song-card.component';
 
 @Component({
     selector: 'game-page',
@@ -14,10 +16,13 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
         CommonModule,
         InputTextModule,
         FormsModule,
-        AutoCompleteModule
+        AutoCompleteModule,
+        CardModule,
+        SongCardComponent
     ],
     templateUrl: './game-page.component.html',
-    styleUrl: './game-page.component.scss'
+    styleUrl: './game-page.component.scss',
+    encapsulation: ViewEncapsulation.None
 })
 
 export class GamePageComponent implements OnInit {
@@ -31,8 +36,10 @@ export class GamePageComponent implements OnInit {
   artistSongs: string[];
 
   guessText: string;
+  currentGuess = 0;
   guesses: string[] = [];
-  guessResults: number[] = [];
+  guessResults: number[] = [-1, -1, -1, -1, -1];
+  guessEmojis: string = '';
 
   autoSuggestions: string[];
 
@@ -43,6 +50,7 @@ export class GamePageComponent implements OnInit {
 
   ngOnInit(): void {
     this.initGame();
+    this.buildGuessEmojis();
   }
 
   initGame() {
@@ -52,40 +60,50 @@ export class GamePageComponent implements OnInit {
   getSongList() {
     this.artistService.getTopSongs(this.dailyArtist.name)
       .subscribe((songs) => {
-        console.log(songs);
         this.artistSongs = songs;
       });
   }
 
   fillAutoComplete(event: any) {
-    console.log(event);
     this.artistService.searchSongs(event.query).subscribe((songs) => {
-      console.log(songs);
       this.autoSuggestions = songs;
     })
   }
 
   guessSong() {
-    console.log(this.guessText);
-
     const song = this.artistSongs.find((song) => song == this.guessText);
 
     if (song) {
       this.guesses.push(song);
-      this.guessResults.push(1);
+      this.guessResults[this.currentGuess] = 1;
     } else {
       this.guesses.push(this.guessText);
-      this.guessResults.push(0);
+      this.guessResults[this.currentGuess] = 0;
     }
 
+    console.log(this.guessResults);
+
     this.guessText = "";
+    this.currentGuess++;
+    this.buildGuessEmojis();
     this.validateGameEnd();
+  }
+
+  buildGuessEmojis() {
+    this.guessEmojis = '';
+    for (let i = 0; i < 5; i++) {
+      if (this.guessResults[i] != -1) {
+        this.guessEmojis += this.guessResults[i] == 1 ? "✅ " : "❌ ";
+      } else {
+        this.guessEmojis += "⬜️ "
+      }
+    }
   }
 
   validateGameEnd() {
     let numOfWins = 0;
     this.guessResults.forEach((value) => {
-      if (value) {
+      if (value == 1) {
         numOfWins++;
       }
     });

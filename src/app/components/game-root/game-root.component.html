@@ -1,10 +1,18 @@
-<game-page 
-	*ngIf="gameInProgress && dailyArtist"
-	[dailyArtist]="dailyArtist"
-	(gameEnd)="navigateToEndPage($event)">
-</game-page>
+<div *ngIf="dailyArtist" class="container">
+	<start-page 
+		*ngIf="gameState == 'start'"
+		[dailyArtist]="dailyArtist"
+		(startGame)="navigateToGame()">
+	</start-page>
 
-<end-page
-	*ngIf="!gameInProgress"
-	[result]="gameResults">
-</end-page>
+	<game-page 
+		*ngIf="gameState == 'inprogress'"
+		[dailyArtist]="dailyArtist"
+		(gameEnd)="navigateToEndPage($event)">
+	</game-page>
+
+	<end-page
+		*ngIf="gameState == 'end'"
+		[result]="gameResults">
+	</end-page>
+</div>

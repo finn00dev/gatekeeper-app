@@ -5,6 +5,8 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { EndPageComponent } from "../end-page/end-page.component";
 import { Artist } from '../../model/artist.model';
 import { ArtistService } from '../../service/artist/artist.service';
+import { GameState } from '../../model/game-state.model';
+import { StartPageComponent } from '../start-page/start-page.component';
 
 @Component({
     selector: 'game-root',
@@ -12,14 +14,17 @@ import { ArtistService } from '../../service/artist/artist.service';
     imports: [
     GamePageComponent,
     CommonModule,
-    EndPageComponent
+    EndPageComponent,
+    StartPageComponent
 ],
     templateUrl: './game-root.component.html',
     styleUrl: './game-root.component.scss'
 })
+
+
 export class GameRootComponent {
 
-	gameInProgress = true;
+	gameState: GameState = GameState.Start;
 	gameResults: GameResult;
 
 	dailyArtist: Artist
@@ -42,8 +47,12 @@ export class GameRootComponent {
 		this.dailyArtist = artists[+dateString % artists.length]
 	}
 
+	navigateToGame() {
+		this.gameState = GameState.InProgress;
+	}
+
 	navigateToEndPage(result: GameResult) {
-		this.gameInProgress = false;
+		this.gameState = GameState.End;
 		this.gameResults = result;
 	}
 }

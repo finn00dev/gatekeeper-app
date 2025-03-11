@@ -1,6 +1,22 @@
-<div *ngIf="result.win; else lossScreen">
-    WIN
+<div class="container">
+	<div *ngIf="result.win; else lossScreen">
+		<h1 class="end-prompt">Fine, you can wear their merch.</h1>
+	
+		<h3 class="end-stats">You guessed 3 correct songs in {{ result.guessResults.length }} tries.</h3>
+	</div>
+	<ng-template #lossScreen>
+		<h1 class="end-prompt">Hand over the band tee.</h1>
+	
+		<h3 class="end-stats">You only guessed {{ numOfCorrectGuesses }} songs correctly.</h3>
+	</ng-template>
+
+	<div class="score-section">
+		<h6 class="date">Score: {{ currentDate }}</h6>
+		<span class="emojis">{{ guessEmojis }}</span>
+	</div>
+
+	<p-button 
+		styleClass="share-button"
+		label="Share"/>
+
 </div>
-<ng-template #lossScreen>
-    LOSE
-</ng-template>

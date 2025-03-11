@@ -1,0 +1,46 @@
+.container {
+	margin: 30px;
+	height: 100%;
+
+	display: flex;
+	flex-direction: column;
+	// flex-wrap: wrap;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.website-title {
+	color: black;
+	font-size: 24px;
+	text-align: center;
+	letter-spacing: 2px;
+	margin-top: 0px;
+	margin-bottom: 100px;
+}
+
+.page-title {
+	color: #218380;
+	font-size: 48px;
+
+	line-height: 100%;
+	margin-top: 0px;
+	margin-bottom: 90px;
+	max-width: 400px;
+	width: 100%;
+}
+
+.begin-button {
+	width: 100%;
+	border-radius: 15px !important;
+	height: 55px;
+	background-color: #1C6361 !important;
+	color: white !important;
+
+	span {
+		font-size: 24px;
+	}
+}
+
+.right {
+	text-align: right;
+}

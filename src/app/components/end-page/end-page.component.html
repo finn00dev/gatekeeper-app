@@ -2,7 +2,7 @@
 	<div *ngIf="result.win; else lossScreen">
 		<h1 class="end-prompt">Fine, you can wear their merch.</h1>
 	
-		<h3 class="end-stats">You guessed 3 correct songs in {{ result.guessResults.length }} tries.</h3>
+		<h3 class="end-stats">You guessed 3 correct songs in {{ result.numberOfGuesses }} tries.</h3>
 	</div>
 	<ng-template #lossScreen>
 		<h1 class="end-prompt">Hand over the band tee.</h1>

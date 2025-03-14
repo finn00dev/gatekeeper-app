@@ -73,12 +73,17 @@ export class GamePageComponent implements OnInit {
   guessSong() {
     const song = this.artistSongs.find((song) => song == this.guessText);
 
-    if (song) {
-      this.guesses.push(song);
-      this.guessResults[this.currentGuess] = 1;
+    if (!this.guesses.includes(this.guessText)) {
+      if (song) {
+        this.guesses.push(song);
+        this.guessResults[this.currentGuess] = 1;
+      } else {
+        this.guesses.push(this.guessText);
+        this.guessResults[this.currentGuess] = 0;
+      }
     } else {
-      this.guesses.push(this.guessText);
-      this.guessResults[this.currentGuess] = 0;
+      this.guessText = "";
+      return;
     }
 
     console.log(this.guessResults);
@@ -101,15 +106,19 @@ export class GamePageComponent implements OnInit {
   }
 
   validateGameEnd() {
-    let numOfWins = 0;
+    let numOfWins = 0, numOfGuesses = 0;
     this.guessResults.forEach((value) => {
       if (value == 1) {
         numOfWins++;
+      }
+      if (value != -1) {
+        numOfGuesses++;
       }
     });
 
     const gameResult: GameResult = {
       win: true,
+      numberOfGuesses: numOfGuesses,
       guessResults: this.guessResults
     }
 

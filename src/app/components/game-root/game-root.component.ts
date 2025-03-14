@@ -7,6 +7,7 @@ import { Artist } from '../../model/artist.model';
 import { ArtistService } from '../../service/artist/artist.service';
 import { GameState } from '../../model/game-state.model';
 import { StartPageComponent } from '../start-page/start-page.component';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
     selector: 'game-root',
@@ -31,14 +32,26 @@ export class GameRootComponent {
 
 	constructor(
 		private artistService: ArtistService,
-		private datePipe: DatePipe
+		private datePipe: DatePipe,
+		private cookieService: CookieService
 	) {}
 
 	ngOnInit(): void {
+		this.isCookiePresent();
 		this.artistService.getTopArtists()
 		.subscribe((artists) => {
 			this.getDailyArtist(artists);
 		});
+	}
+	
+	isCookiePresent(): boolean{
+		const cookie_value = this.cookieService.get('todaysResult');
+		if (cookie_value) {
+			this.gameState = GameState.End;
+			this.gameResults = JSON.parse(cookie_value);
+			return true;
+		}
+		return false
 	}
 
 	getDailyArtist(artists: Artist[]) {

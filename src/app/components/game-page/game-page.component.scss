@@ -15,22 +15,22 @@
 
 .name-three-title {
   	color: #238380;
-	font-size: 32px;
+	font-size: 28px;
 	text-align: center;
 	line-height: 100%;
 
-	margin-top: 20px;
-	margin-bottom: 40px;
+	margin-top: 0px;
+	margin-bottom: 30px;
 }
 
 .guess-status {
 	span {
-		font-size: 32px;
+		font-size: 28px;
 	}
 
 	&-text {
 		color: #238380;
-		font-size: 18px;
+		font-size: 16px;
 		text-align: center;
 		letter-spacing: 2px;
 
@@ -43,7 +43,6 @@
 	margin-top: 50px;
 	margin-bottom: 50px;
 	width: 100%;
-	min-height: 280px;
 
 	song-card {
 		width: 100%;

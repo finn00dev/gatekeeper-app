@@ -61,7 +61,9 @@ export class GameRootComponent {
 	}
 
 	navigateToGame() {
-		this.gameState = GameState.InProgress;
+		if (!this.isCookiePresent()) {
+			this.gameState = GameState.InProgress;
+		}
 	}
 
 	navigateToEndPage(result: GameResult) {

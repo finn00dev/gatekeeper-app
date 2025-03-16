@@ -1,5 +1,5 @@
 .container {
-	margin: 30px;
+	// margin: 30px;
 	height: 100%;
 
 	display: flex;
@@ -10,6 +10,7 @@
 
 	p-autocomplete {
 		width: 100%;
+		max-width: 350px;
 	}
 }
 
@@ -43,6 +44,7 @@
 	margin-top: 50px;
 	margin-bottom: 50px;
 	width: 100%;
+	max-width: 350px;
 
 	song-card {
 		width: 100%;

@@ -3,6 +3,7 @@ import { GameResult } from '../../model/game-result.model';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { CookieService } from 'ngx-cookie-service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'end-page',
@@ -47,6 +48,16 @@ export class EndPageComponent implements OnInit {
         this.guessEmojis += "❌ "
       }
     });
+  }
+
+  shareScore() {
+    if (navigator.share) {
+      navigator.share({
+        title: `I beat today\'s gatekeepr! ${this.currentDate}\n ${this.guessEmojis}`,
+        text: `Give it a shot? ${environment.liveUrl}`
+      }).then(() => console.log("Score Shared!"))
+        .catch(() => console.error("Share Error"));
+    }
   }
 
   buildCurrentDate() {

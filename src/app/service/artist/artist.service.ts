@@ -23,7 +23,7 @@ export class ArtistService {
 
   getTopSongs(artistName: string): Observable<string[]> {
     return this.http
-      .get<any>(`${this.apiUrl}artist.gettoptracks&artist=${artistName.replace(' ', "%20")}&api_key=${environment.apiKey}&format=json&limit=150`)
+      .get<any>(`${this.apiUrl}artist.gettoptracks&artist=${artistName.replace(' ', "%20")}&api_key=${environment.apiKey}&format=json&limit=250`)
         .pipe(
           map((resp) => {
             const songs = resp.toptracks.track as any[];
@@ -31,8 +31,7 @@ export class ArtistService {
           }),
         );
   }
-//method=track.search&track=Bound&api_key=c7fdd729c180d175c4d780d323c2f1b9&format=json
-
+  
   searchSongs(searchTerm: string): Observable<string[]> {
     return this.http
       .get<any>(`${this.apiUrl}track.search&track=${searchTerm.replace(' ', "%20")}&api_key=${environment.apiKey}&format=json&limit=6`)

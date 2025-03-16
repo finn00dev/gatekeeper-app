@@ -18,6 +18,10 @@
 
 		color: #218380;
 		font-size: 48px;
+
+		//ANIMATIONS
+		-webkit-animation: slide-right 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+		animation: slide-right 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 	}
 
 	.end-stats {
@@ -31,6 +35,9 @@
 		color: #218380;
 		font-size: 36px;
 
+		//ANIMATIONS
+		-webkit-animation: slide-right 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.3s both;
+		animation: slide-right 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.3s both;
 	}
 
 	.score-section {
@@ -45,6 +52,10 @@
 		.emojis {
 			font-size: 28px;
 		}
+
+		//ANIMATIONS
+		-webkit-animation: fade-in 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.6s both;
+		animation: fade-in 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.6s both;
 	}
 
 	.share-button {

@@ -86,8 +86,6 @@ export class GamePageComponent implements OnInit {
       return;
     }
 
-    console.log(this.guessResults);
-
     this.guessText = "";
     this.currentGuess++;
     this.buildGuessEmojis();
@@ -121,7 +119,7 @@ export class GamePageComponent implements OnInit {
       numberOfGuesses: numOfGuesses,
       guessResults: this.guessResults
     }
-
+    
     if (numOfWins == this.NUM_TO_WIN) {
       this.gameEnd.emit(gameResult);
     } else if (this.guesses.length == this.MAX_GUESSES) {

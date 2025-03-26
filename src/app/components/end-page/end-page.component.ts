@@ -1,9 +1,11 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, HostListener, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { GameResult } from '../../model/game-result.model';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { CookieService } from 'ngx-cookie-service';
 import { environment } from '../../../environments/environment';
+import { StatisticsService } from '../../service/statistics/statistics.service';
+import { UserStatistics } from '../../model/user-statistics.model';
 
 @Component({
   selector: 'end-page',
@@ -25,9 +27,13 @@ export class EndPageComponent implements OnInit {
   guessEmojis: string = '';
   currentDate: string = '';
 
+  showStats: boolean = false;
+  userStatistics: UserStatistics;
+
   constructor(
     private datePipe: DatePipe,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private statisticsService: StatisticsService
   ) {}
 
   ngOnInit(): void {
@@ -36,6 +42,14 @@ export class EndPageComponent implements OnInit {
     this.buildEmojiScore();
     this.buildCurrentDate();
     this.storeCookie();
+    this.getStatistics();
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onScroll(event: any) {
+    if (!this.showStats) {
+      this.showStats = true;
+    }
   }
 
   buildEmojiScore() {
@@ -48,6 +62,10 @@ export class EndPageComponent implements OnInit {
         this.guessEmojis += "❌ "
       }
     });
+  }
+
+  getStatistics() {
+    this.userStatistics = this.statisticsService.getStatistics();
   }
 
   shareScore() {

@@ -2,12 +2,12 @@
 	<div *ngIf="result.win; else lossScreen">
 		<h1 class="end-prompt">Fine, you can wear their merch.</h1>
 	
-		<h3 class="end-stats">You guessed 3 correct songs in {{ result.numberOfGuesses }} tries.</h3>
+		<h3 class="end-stat">You guessed 3 correct songs in {{ result.numberOfGuesses }} tries.</h3>
 	</div>
 	<ng-template #lossScreen>
 		<h1 class="end-prompt">Hand over the band tee.</h1>
 	
-		<h3 class="end-stats">You only guessed {{ numOfCorrectGuesses }} songs correctly.</h3>
+		<h3 class="end-stat">You only guessed {{ numOfCorrectGuesses }} songs correctly.</h3>
 	</ng-template>
 
 	<div class="score-section">
@@ -20,4 +20,32 @@
 		(click)="shareScore()"
 		label="Share"/>
 
+	<p *ngIf="!showStats; else statsSection" class="scroll-warning">
+		Scroll For Stats
+	</p>
+
 </div>
+
+<ng-template #statsSection>
+	<div class="statistics">
+		<h6 class="title">Game Statistics</h6>
+		<div class="stats-grid">
+			<div class="stats-grid-item">
+				<p class="value">{{ userStatistics.currentStreak }}🔥</p>
+				<p>Current Streak</p>
+			</div>
+			<div class="stats-grid-item">
+				<p class="value">{{ userStatistics.highestStreak }}</p>
+				<p>Highest Streak</p>
+			</div>
+			<div class="stats-grid-item">
+				<p class="value">{{ userStatistics.gamesWon }}</p>
+				<p>Games Won</p>
+			</div>
+		</div>
+		<h6 class="blurb">
+			You have faced gatekeepr <span class="highlight1">{{ userStatistics.gamesTotal }} times</span>,
+			winning in an average of <span class="highlight2">{{ userStatistics.avgGuesses | number: '1.0-1' }} guesses</span>
+		</h6>
+	</div>
+</ng-template>

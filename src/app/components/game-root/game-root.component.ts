@@ -8,6 +8,7 @@ import { ArtistService } from '../../service/artist/artist.service';
 import { GameState } from '../../model/game-state.model';
 import { StartPageComponent } from '../start-page/start-page.component';
 import { CookieService } from 'ngx-cookie-service';
+import { StatisticsService } from '../../service/statistics/statistics.service';
 
 @Component({
     selector: 'game-root',
@@ -33,7 +34,8 @@ export class GameRootComponent {
 	constructor(
 		private artistService: ArtistService,
 		private datePipe: DatePipe,
-		private cookieService: CookieService
+		private cookieService: CookieService,
+		private statisticsService: StatisticsService
 	) {}
 
 	ngOnInit(): void {
@@ -57,7 +59,7 @@ export class GameRootComponent {
 	getDailyArtist(artists: Artist[]) {
 		const date = new Date();
 		const dateString = this.datePipe.transform(date, 'yyyyMMdd') || '';
-		this.dailyArtist = artists[+dateString % artists.length]
+		this.dailyArtist = artists[+dateString % artists.length];
 	}
 
 	navigateToGame() {
@@ -69,5 +71,6 @@ export class GameRootComponent {
 	navigateToEndPage(result: GameResult) {
 		this.gameState = GameState.End;
 		this.gameResults = result;
+		this.statisticsService.updateStatistics(result);
 	}
 }

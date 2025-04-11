@@ -1,31 +1,50 @@
 <div class="container">
-	<h6 *ngIf="dailyArtist" class="name-three-title">
-		Name 3 {{dailyArtist.name}} songs.
+
+	<div class="tier" [style.background-color]="currTier.color">
+		<p>Tier: {{ this.currTier.title }}</p>
+	</div>
+
+	<h6 *ngIf="dailyArtist" class="name-songs-title">
+		Name {{dailyArtist.name}} Songs.
 	</h6>
 
 	<div class="guess-status">
-		<span>
-			{{ guessEmojis }}
-		</span>
-		<p class="guess-status-text">Guesses</p>
-	</div>
-	
-	<div class="guess-list">
-		<div *ngFor="let value of guessResults; index as i" class="guess-list-item">
-			<song-card
-				[listNo]="i + 1"
-				[value]="value"
-				[songName]="guesses[i]">
-			</song-card>
+		<div class="lives-container">
+			<p class="lives-container__label">Lives:</p>
+			<p class="lives-container__hearts">{{ "❤️".repeat(lives)}}</p>
+		</div>
+		<div class="tier-status-container" *ngIf="!hitMaxTier">
+			<p class="tier-status-container__label">Next Tier in</p>
+			<p class="tier-status-container__value">{{ guessesUntilNextTier }} Songs</p>
+		</div>
+		<div class="tier-status-container" *ngIf="hitMaxTier">
+			<p class="tier-status-container__label">Score:</p>
+			<p class="tier-status-container__value">{{ numOfCorrectGuesses }} Songs</p>
 		</div>
 	</div>
+
+	<div class="guess-input-container">
+		<p class="guess-input-container__label">Enter Guesses Here</p>
+		<p-autocomplete 
+			[(ngModel)]="guessText"
+			styleClass="guess-input"
+			[delay]="1000" 
+			[suggestions]="autoSuggestions" 
+			(completeMethod)="fillAutoComplete($event)"
+			(onSelect)="guessSong()"/>
+	</div>
 	
-	<!-- <input type="text" pInputText [(ngModel)]="guessText" (keydown.enter)="guessSong()"/> -->
-	<p-autocomplete 
-		[(ngModel)]="guessText"
-		styleClass="guess-input"
-		[delay]="1000" 
-		[suggestions]="autoSuggestions" 
-		(completeMethod)="fillAutoComplete($event)"
-		(onSelect)="guessSong()"/>
+	<div class="guess-list" *ngIf="guesses.length">
+		<p class="guess-list__label">Guesses:</p>
+		<div *ngFor="let value of guessResults; index as i" class="guess-list-item">
+			<p-card styleClass="song-card">
+				<span>{{ value ? "✅" : "❌"}}</span>
+				<p class="song-title"> {{ guesses[i] }}</p>
+			</p-card>
+		</div>
+	</div>
+
+	<div class="give-up-container" (click)="endGame()">
+		<h6 class="label">Give Up?</h6>
+	</div>
 </div>

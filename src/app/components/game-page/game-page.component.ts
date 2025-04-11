@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { GameResult } from '../../model/game-result.model';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CardModule } from 'primeng/card';
-import { SongCardComponent } from '../song-card/song-card.component';
+import { Tier, GAME_TIERS } from '../../model/tier.model';
 
 @Component({
     selector: 'game-page',
@@ -18,7 +18,6 @@ import { SongCardComponent } from '../song-card/song-card.component';
         FormsModule,
         AutoCompleteModule,
         CardModule,
-        SongCardComponent
     ],
     templateUrl: './game-page.component.html',
     styleUrl: './game-page.component.scss',
@@ -30,16 +29,18 @@ export class GamePageComponent implements OnInit {
   @Input() dailyArtist: Artist;
   @Output() gameEnd = new EventEmitter<GameResult>();
 
-  MAX_GUESSES = 5;
-  NUM_TO_WIN = 3;
-
   artistSongs: string[];
 
   guessText: string;
-  currentGuess = 0;
+
+  lives = 3;
+  currTier: Tier;
+  numOfCorrectGuesses = 0;
+  guessesUntilNextTier: number;
+  hitMaxTier = false;
+
   guesses: string[] = [];
-  guessResults: number[] = [-1, -1, -1, -1, -1];
-  guessEmojis: string = '';
+  guessResults: number[] = [];
 
   autoSuggestions: string[];
 
@@ -50,11 +51,11 @@ export class GamePageComponent implements OnInit {
 
   ngOnInit(): void {
     this.initGame();
-    this.buildGuessEmojis();
   }
 
   initGame() {
     this.getSongList();
+    this.calculateTier();
   }
 
   getSongList() {
@@ -74,12 +75,16 @@ export class GamePageComponent implements OnInit {
     const song = this.artistSongs.find((song) => song == this.guessText);
 
     if (!this.guesses.includes(this.guessText)) {
+      // Correct Guess
       if (song) {
         this.guesses.push(song);
-        this.guessResults[this.currentGuess] = 1;
+        this.guessResults.push(1);
+        this.numOfCorrectGuesses++;
+      // Incorrect Guess
       } else {
         this.guesses.push(this.guessText);
-        this.guessResults[this.currentGuess] = 0;
+        this.guessResults.push(0);
+        this.lives--;
       }
     } else {
       this.guessText = "";
@@ -87,42 +92,45 @@ export class GamePageComponent implements OnInit {
     }
 
     this.guessText = "";
-    this.currentGuess++;
-    this.buildGuessEmojis();
+    this.calculateTier();
     this.validateGameEnd();
   }
 
-  buildGuessEmojis() {
-    this.guessEmojis = '';
-    for (let i = 0; i < 5; i++) {
-      if (this.guessResults[i] != -1) {
-        this.guessEmojis += this.guessResults[i] == 1 ? "✅ " : "❌ ";
-      } else {
-        this.guessEmojis += "⬜️ "
-      }
+  validateGameEnd() {
+    if (this.lives == 0) {
+      this.endGame();
     }
   }
 
-  validateGameEnd() {
-    let numOfWins = 0, numOfGuesses = 0;
-    this.guessResults.forEach((value) => {
-      if (value == 1) {
-        numOfWins++;
+  calculateTier() {
+    let nextTier;
+    for (let i = 0; i < GAME_TIERS.length; i++) {
+      console.log(GAME_TIERS[i].title);
+      if (this.numOfCorrectGuesses < GAME_TIERS[i].value) {
+        this.currTier = GAME_TIERS[i-1];
+        nextTier = GAME_TIERS[i];
+        break;
+      } else if (i == GAME_TIERS.length - 1) {
+        this.currTier = GAME_TIERS[i];
+        this.hitMaxTier = true;
       }
-      if (value != -1) {
-        numOfGuesses++;
-      }
-    });
+    }
 
+    if (nextTier) {
+      this.guessesUntilNextTier = nextTier.value - this.numOfCorrectGuesses;
+    }
+  }
+
+  endGame() {
     const gameResult: GameResult = {
       win: true,
-      numberOfGuesses: numOfGuesses,
-      guessResults: this.guessResults
+      numberOfCorrectGuesses: this.numOfCorrectGuesses,
+      tier: this.currTier
     }
     
-    if (numOfWins == this.NUM_TO_WIN) {
+    if (this.numOfCorrectGuesses >= GAME_TIERS[0].value) {
       this.gameEnd.emit(gameResult);
-    } else if (this.guesses.length == this.MAX_GUESSES) {
+    } else {
       gameResult.win = false;
       this.gameEnd.emit(gameResult);
     }

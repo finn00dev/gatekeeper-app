@@ -21,11 +21,9 @@ import { UserStatistics } from '../../model/user-statistics.model';
 export class EndPageComponent implements OnInit {
 
   @Input('result') result: GameResult;
-  guessValues: number[];
-  numOfCorrectGuesses: number;
 
-  guessEmojis: string = '';
   currentDate: string = '';
+  emojiScore: string;
 
   showStats: boolean = false;
   userStatistics: UserStatistics;
@@ -37,31 +35,10 @@ export class EndPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.guessValues = this.result.guessResults;
-    this.numOfCorrectGuesses = this.guessValues.reduce(function (acc, cur) { return acc + cur; });
-    this.buildEmojiScore();
     this.buildCurrentDate();
     this.storeCookie();
+    this.buildEmojiScore();
     this.getStatistics();
-  }
-
-  @HostListener('window:scroll', ['$event'])
-  onScroll(event: any) {
-    if (!this.showStats) {
-      this.showStats = true;
-    }
-  }
-
-  buildEmojiScore() {
-    this.guessEmojis = '';
-    console.log(this.guessValues);
-    this.guessValues.forEach((value) => {
-      if (value == 1) {
-        this.guessEmojis += "✅ "
-      } else if (value == 0) {
-        this.guessEmojis += "❌ "
-      }
-    });
   }
 
   getStatistics() {
@@ -70,9 +47,17 @@ export class EndPageComponent implements OnInit {
 
   shareScore() {
     if (navigator.share) {
+
+      let text;
+      if (this.result.win) {
+        text = `I reached ${this.result.tier.title} ${this.result.tier.emoji} status!\n Give it a shot? ${environment.liveUrl}`;
+      } else {
+        text = `Give it a shot? ${environment.liveUrl}`;
+      }
+
       navigator.share({
-        title: `I beat today\'s gatekeepr! ${this.currentDate}\n ${this.guessEmojis}`,
-        text: `Give it a shot? ${environment.liveUrl}`
+        title: `gatekeepr: ${this.currentDate}`,
+        text: text
       }).then(() => console.log("Score Shared!"))
         .catch(() => console.error("Share Error"));
     }
@@ -90,5 +75,14 @@ export class EndPageComponent implements OnInit {
       expiry.setHours(0,0,0,0);
       this.cookieService.set('todaysResult', JSON.stringify(this.result), expiry);
     }
+  }
+
+  buildEmojiScore() {
+    console.log(this.result);
+    this.emojiScore = `${this.result.tier.emoji} ${this.result.tier.title} ${this.result.tier.emoji}`
+  }
+
+  openStats(value: boolean) {
+    this.showStats = value;
   }
 }

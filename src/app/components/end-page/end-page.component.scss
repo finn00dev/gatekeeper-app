@@ -1,6 +1,5 @@
 .container {
 	margin: 30px;
-	height: 100vh;
 
 	display: flex;
 	flex-direction: column;
@@ -49,7 +48,8 @@
 			
 			margin-bottom: 0;
 		}
-		.emojis {
+		.tier {
+			color: #218380;
 			font-size: 28px;
 		}
 
@@ -67,10 +67,23 @@
 		margin-top: 30px;
 	
 		span {
-			font-size: 24px;
+			font-size: 32px;
 		}
 	}
 
+	.stats-button {
+		width: 100%;
+		border-radius: 15px !important;
+		border: 3px solid #1c6361a1;
+		height: 42px;
+		background-color: #ffffff46 !important;
+		color: #1c6361a1 !important;
+		margin-top: 12px;
+	
+		span {
+			font-size: 20px;
+		}
+	}
 	p-button {
 		max-width: 400px;
 	}
@@ -91,15 +104,27 @@
 		max-width: 400px;
 
 		//ANIMATIONS
-		-webkit-animation: fade-in 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.6s both;
-		animation: fade-in 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.6s both;
+		-webkit-animation: fade-in 0.6s cubic-bezier(0.250, 0.460, 0.450, 0.940) 0s both;
+		animation: fade-in 0.6s cubic-bezier(0.250, 0.460, 0.450, 0.940) 0s both;
 
-		.title {
+		&-header {
+			display: flex;
+			justify-content: space-between;
 			margin-top: 60px;
 			margin-bottom: 32px;
+			color: #218380;
+
+			.title {
+				text-align: center;
+				align-self: center;
+				font-size: 20px;
+				margin: 0;
+			}
+		}
+
+		.title {
 			text-align: center;
 			font-size: 20px;
-			color: #218380;
 		}
 
 		.stats-grid {

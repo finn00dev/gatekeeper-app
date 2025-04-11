@@ -1,20 +1,17 @@
 <div [ngSwitch]="value">
     <div *ngSwitchCase="1" class="song-container">
-        <span class="list-number">{{ listNo + "." }}</span>
         <p-card styleClass="song-card">
-            <span *ngIf="value == 1">✅</span>
+            <span>✅</span>
             <p class="song-title"> {{ songName }}</p>
         </p-card>
     </div>
     <div *ngSwitchCase="0" class="song-container">
-        <span class="list-number">{{ listNo + "." }}</span>
         <p-card styleClass="song-card">
             <span *ngIf="value == 0">❌</span>
             <p class="song-title"> {{ songName }}</p>
         </p-card>
     </div>
     <div *ngSwitchCase="-1" class="song-container">
-        <span class="list-number">{{ listNo + "." }}</span>
         <p-card styleClass="song-card-empty">
         </p-card>
     </div>

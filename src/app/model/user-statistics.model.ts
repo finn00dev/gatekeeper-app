@@ -1,7 +1,8 @@
 export interface UserStatistics {
     currentStreak?: string;
     highestStreak: string;
+    highScore: number;
     gamesWon: number;
     gamesTotal: number;
-    avgGuesses?: number;
+    winRate: number;
 }

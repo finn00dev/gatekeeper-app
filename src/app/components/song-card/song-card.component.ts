@@ -14,7 +14,6 @@ import { CardModule } from 'primeng/card';
 })
 export class SongCardComponent {
 
-  @Input() listNo: number;
   @Input() value: number;
   @Input() songName: string;
 

@@ -14,15 +14,16 @@ export class StatisticsService {
 
   getStatistics(): UserStatistics {
     const history: GameResult[] = JSON.parse(this.cookieService.get('gameHistory'));
-    const guesses = history.filter((game) => game.win).reduce((acc, cur) => acc + cur.numberOfGuesses, 0);
-    const  numOfWins = history.filter((game) => game.win).length
+    const  numOfWins = history.filter((game) => game.win).length;
+    const highScore = history.reduce((max, post) => post.numberOfCorrectGuesses > max.numberOfCorrectGuesses ? post : max ).numberOfCorrectGuesses;
 
     return {
       currentStreak: this.cookieService.get('currentStreak') || '0',
       highestStreak: this.cookieService.get('highestStreak') || '0',
+      highScore: highScore,
       gamesWon: numOfWins,
       gamesTotal: history.length,
-      avgGuesses: guesses / numOfWins,
+      winRate: numOfWins / history.length,
     }
   }
 

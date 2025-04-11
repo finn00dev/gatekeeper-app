@@ -1,5 +1,7 @@
+import { Tier } from "./tier.model";
+
 export interface GameResult {
     win: boolean;
-    numberOfGuesses: number;
-    guessResults: number[];
+    numberOfCorrectGuesses: number;
+    tier: Tier;
 }

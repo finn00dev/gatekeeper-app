@@ -6,6 +6,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { environment } from '../../../environments/environment';
 import { StatisticsService } from '../../service/statistics/statistics.service';
 import { UserStatistics } from '../../model/user-statistics.model';
+import { AnalyticsService } from '../../service/analytics/analytics.service';
 
 @Component({
   selector: 'end-page',
@@ -31,7 +32,8 @@ export class EndPageComponent implements OnInit {
   constructor(
     private datePipe: DatePipe,
     private cookieService: CookieService,
-    private statisticsService: StatisticsService
+    private statisticsService: StatisticsService,
+    private analyticsService: AnalyticsService
   ) {}
 
   ngOnInit(): void {
@@ -60,6 +62,8 @@ export class EndPageComponent implements OnInit {
         text: text
       }).then(() => console.log("Score Shared!"))
         .catch(() => console.error("Share Error"));
+      
+      this.analyticsService.userHitShare();
     }
   }
 

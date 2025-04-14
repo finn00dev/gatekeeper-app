@@ -10,6 +10,7 @@ import { GameResult } from '../../model/game-result.model';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CardModule } from 'primeng/card';
 import { Tier, GAME_TIERS } from '../../model/tier.model';
+import { AnalyticsService } from '../../service/analytics/analytics.service';
 
 @Component({
     selector: 'game-page',
@@ -52,7 +53,7 @@ export class GamePageComponent implements OnInit {
 
   constructor(
     private artistService: ArtistService,
-    private datePipe: DatePipe
+    private analyticsService: AnalyticsService
   ) {}
 
   ngOnInit(): void {
@@ -90,6 +91,10 @@ export class GamePageComponent implements OnInit {
         this.guesses.push(song);
         this.guessResults.push(1);
         this.numOfCorrectGuesses++;
+
+        if (this.numOfCorrectGuesses == 3) {
+          this.analyticsService.userWon();
+        }
       // Incorrect Guess
       } else {
         this.guesses.push(this.guessText);
@@ -147,6 +152,11 @@ export class GamePageComponent implements OnInit {
       gameResult.win = false;
       this.gameEnd.emit(gameResult);
     }
+  }
+
+  clickGiveUp() {
+    this.analyticsService.userGaveUp();
+    this.endGame();
   }
 
   showModal(value: boolean) {

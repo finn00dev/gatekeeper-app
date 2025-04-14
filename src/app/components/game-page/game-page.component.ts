@@ -72,9 +72,13 @@ export class GamePageComponent implements OnInit {
   }
 
   fillAutoComplete(event: any) {
-    this.artistService.searchSongs(event.query).subscribe((songs) => {
-      this.autoSuggestions = songs;
-    })
+    if (event.query.toLowerCase() != this.dailyArtist.name.toLowerCase()) {
+      this.artistService.searchSongs(event.query).subscribe((songs) => {
+        this.autoSuggestions = songs;
+      })
+    } else {
+      this.autoSuggestions = [];
+    }
   }
 
   guessSong() {
@@ -136,8 +140,8 @@ export class GamePageComponent implements OnInit {
       numberOfCorrectGuesses: this.numOfCorrectGuesses,
       tier: this.currTier
     }
-    
-    if (this.numOfCorrectGuesses >= GAME_TIERS[0].value) {
+
+    if (this.numOfCorrectGuesses >= GAME_TIERS[1].value) {
       this.gameEnd.emit(gameResult);
     } else {
       gameResult.win = false;

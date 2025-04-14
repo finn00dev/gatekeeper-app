@@ -1,5 +1,4 @@
 <div class="container">
-
 	<div class="tier" [style.background-color]="currTier.color">
 		<p>Tier: {{ this.currTier.title }}</p>
 	</div>
@@ -13,11 +12,11 @@
 			<p class="lives-container__label">Lives:</p>
 			<p class="lives-container__hearts">{{ "❤️".repeat(lives)}}</p>
 		</div>
-		<div class="tier-status-container" *ngIf="!hitMaxTier">
+		<div class="tier-status-container" *ngIf="!endlessMode">
 			<p class="tier-status-container__label">Next Tier in</p>
 			<p class="tier-status-container__value">{{ guessesUntilNextTier }} Songs</p>
 		</div>
-		<div class="tier-status-container" *ngIf="hitMaxTier">
+		<div class="tier-status-container" *ngIf="endlessMode">
 			<p class="tier-status-container__label">Score:</p>
 			<p class="tier-status-container__value">{{ numOfCorrectGuesses }} Songs</p>
 		</div>
@@ -48,3 +47,21 @@
 		<h6 class="label">Give Up?</h6>
 	</div>
 </div>
+
+<p-dialog maskStyleClass="modal-blur" [(visible)]="modalVisible" styleClass="end-game-modal" modal="true">
+	<ng-template #headless>
+			<div class="modal-container">
+				<h1 class="title">You Won!</h1>
+				<p class="blurb">{{ `Congratulations, you reached the final tier of gatekeepr, ${currTier.title}. You correctly guessed ${currTier.value} ${dailyArtist.name } songs.` }}</p>
+				<p-button 
+					styleClass="button-1"
+					(click)="endGame()"
+					label="Finish"/>
+				<h6 
+					class="button-2"
+					(click)="showModal(false)">
+					Keep Going!
+				</h6>
+			</div>
+	</ng-template>
+</p-dialog>

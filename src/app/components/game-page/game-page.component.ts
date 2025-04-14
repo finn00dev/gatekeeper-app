@@ -3,6 +3,8 @@ import { ArtistService } from '../../service/artist/artist.service';
 import { Artist } from '../../model/artist.model';
 import { CommonModule, DatePipe } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
 import { FormsModule } from '@angular/forms';
 import { GameResult } from '../../model/game-result.model';
 import { AutoCompleteModule } from 'primeng/autocomplete';
@@ -18,6 +20,8 @@ import { Tier, GAME_TIERS } from '../../model/tier.model';
         FormsModule,
         AutoCompleteModule,
         CardModule,
+        DialogModule,
+        ButtonModule
     ],
     templateUrl: './game-page.component.html',
     styleUrl: './game-page.component.scss',
@@ -37,12 +41,14 @@ export class GamePageComponent implements OnInit {
   currTier: Tier;
   numOfCorrectGuesses = 0;
   guessesUntilNextTier: number;
-  hitMaxTier = false;
+  endlessMode = false;
 
   guesses: string[] = [];
   guessResults: number[] = [];
 
   autoSuggestions: string[];
+
+  modalVisible = false;
 
   constructor(
     private artistService: ArtistService,
@@ -92,7 +98,9 @@ export class GamePageComponent implements OnInit {
     }
 
     this.guessText = "";
-    this.calculateTier();
+    if (!this.endlessMode) {
+      this.calculateTier();
+    }
     this.validateGameEnd();
   }
 
@@ -105,14 +113,15 @@ export class GamePageComponent implements OnInit {
   calculateTier() {
     let nextTier;
     for (let i = 0; i < GAME_TIERS.length; i++) {
-      console.log(GAME_TIERS[i].title);
       if (this.numOfCorrectGuesses < GAME_TIERS[i].value) {
         this.currTier = GAME_TIERS[i-1];
         nextTier = GAME_TIERS[i];
         break;
       } else if (i == GAME_TIERS.length - 1) {
         this.currTier = GAME_TIERS[i];
-        this.hitMaxTier = true;
+        this.endlessMode = true;
+        this.modalVisible = true;
+        break;
       }
     }
 
@@ -134,5 +143,9 @@ export class GamePageComponent implements OnInit {
       gameResult.win = false;
       this.gameEnd.emit(gameResult);
     }
+  }
+
+  showModal(value: boolean) {
+    this.modalVisible = value;
   }
 }

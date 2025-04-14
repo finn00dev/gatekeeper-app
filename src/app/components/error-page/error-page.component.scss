@@ -1,0 +1,43 @@
+.error-container {
+    // width: 100%;
+	margin: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .error-icon {
+        color: #df0202bc;
+        text-align: center;
+    }
+
+    .title {
+        text-align: center;
+        color: #135250;
+    }
+
+    .text {
+        line-height: 100%;
+        max-width: 350px;
+        color: #135250;
+        font-size: 18px;
+
+        margin: 0;
+    }
+}
+
+p-button {
+    max-width: 300px;
+}
+
+.retry-button {
+    width: 100%;
+    border-radius: 15px !important;
+    height: 55px;
+    background-color: #1C6361 !important;
+    color: white !important;
+    margin-top: 30px;
+
+    span {
+        font-size: 20px;
+    }
+}

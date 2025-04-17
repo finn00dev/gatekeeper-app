@@ -52,16 +52,15 @@ export class EndPageComponent implements OnInit {
 
       let text;
       if (this.result.win) {
-        text = `I reached ${this.result.tier.title} ${this.result.tier.emoji} status!\n Give it a shot? ${environment.liveUrl}`;
+        text = `I reached ${this.result.tier.title} ${this.result.tier.emoji} status!\n Play Here: ${environment.liveUrl}`;
       } else {
-        text = `Give it a shot? ${environment.liveUrl}`;
+        text = `Gatekeepr humbled me today :(\nPlay Here: ${environment.liveUrl}`;
       }
 
       navigator.share({
         title: `gatekeepr: ${this.currentDate}`,
         text: text
-      }).then(() => console.log("Score Shared!"))
-        .catch(() => console.error("Share Error"));
+      }).catch(() => console.error("Share Error"));
       
       this.analyticsService.userHitShare();
     }
@@ -82,7 +81,6 @@ export class EndPageComponent implements OnInit {
   }
 
   buildEmojiScore() {
-    console.log(this.result);
     this.emojiScore = `${this.result.tier.emoji} ${this.result.tier.title} ${this.result.tier.emoji}`
   }
 

@@ -9,5 +9,5 @@ export const environment = {
 		appId: "1:2295933369:web:d622682e7deb7d3fbe6e68",
 		measurementId: "G-NCXCVP7C2C"
 	},
-	liveUrl: "https://gatekeepr-acf0e.web.app/"
+	liveUrl: "gate-keepr.com"
 };

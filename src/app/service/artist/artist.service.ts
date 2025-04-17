@@ -49,7 +49,6 @@ export class ArtistService {
       .get<any>(`${this.apiUrl}track.search&track=${searchTerm.replace(' ', "%20")}&api_key=${environment.apiKey}&format=json&limit=6`)
         .pipe(
           map((resp) => {
-            console.log(resp);
             let songs = resp.results.trackmatches.track;
             return songs.map((song: any) => song.name);
           }),

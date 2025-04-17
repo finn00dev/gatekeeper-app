@@ -36,7 +36,7 @@
 .begin-button {
 	width: 100%;
 	border-radius: 15px !important;
-	border: none;
+	border: 0px !important;
 	height: 55px;
 	background-color: #1C6361 !important;
 	color: white !important;
@@ -46,8 +46,8 @@
 	}
 }
 
-.begin-button:hover {
-	border: none;
+.begin-button:not(:disabled):hover {
+	border: 0px !important;
 }
 
 p-button {

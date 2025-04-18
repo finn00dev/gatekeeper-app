@@ -42,7 +42,7 @@
 	.score-section {
 		text-align: center;
 		.date {
-			color: #218380;
+			color: #1C6361;
 			font-size: 20px;
 			letter-spacing: 1px;
 			
@@ -51,6 +51,16 @@
 		.tier {
 			color: #218380;
 			font-size: 28px;
+		}
+		.countdown {
+			color: #218380;
+			font-size: 15px;
+			display: block;
+			margin-top: 30px;
+
+			.timer {
+				color: #1C6361;
+			}
 		}
 
 		//ANIMATIONS
@@ -64,7 +74,7 @@
 		height: 55px;
 		background-color: #1C6361 !important;
 		color: white !important;
-		margin-top: 30px;
+		margin-top: 20px;
 	
 		span {
 			font-size: 32px;

@@ -25,6 +25,8 @@ export class EndPageComponent implements OnInit {
 
   currentDate: string = '';
   emojiScore: string;
+  expiry: Date;
+  countdown: string;
 
   showStats: boolean = false;
   userStatistics: UserStatistics;
@@ -37,10 +39,11 @@ export class EndPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.buildCurrentDate();
+    this.buildDate();
     this.storeCookie();
     this.buildEmojiScore();
     this.getStatistics();
+    this.initTimer();
   }
 
   getStatistics() {
@@ -66,17 +69,21 @@ export class EndPageComponent implements OnInit {
     }
   }
 
-  buildCurrentDate() {
+  buildDate() {
+    //Current Date
 		const date = new Date();
 		this.currentDate = this.datePipe.transform(date, 'yyyy-MM-dd') || '';
+
+    //Expiry Date
+    this.expiry = new Date();
+    this.expiry.setDate(this.expiry.getDate() + 1);
+    this.expiry.setHours(0,0,0,0);
+
   }
 
   storeCookie() {
     if (!this.cookieService.get('todaysResult')) {
-      let expiry = new Date();
-      expiry.setDate(expiry.getDate() + 1);
-      expiry.setHours(0,0,0,0);
-      this.cookieService.set('todaysResult', JSON.stringify(this.result), expiry);
+      this.cookieService.set('todaysResult', JSON.stringify(this.result), this.expiry);
     }
   }
 
@@ -86,5 +93,19 @@ export class EndPageComponent implements OnInit {
 
   openStats(value: boolean) {
     this.showStats = value;
+  }
+
+  initTimer() {
+    setInterval(() => { 
+      const remainingTime = this.expiry.getTime() - Date.now();
+      const hoursLeft = Math.floor(remainingTime / 3600000);
+      const minutesLeft = Math.floor((remainingTime % 3600000) / 60000);
+      const secondsLeft = Math.floor((remainingTime % 60000) / 1000);
+      this.countdown = `${this.forceTwoDigits(hoursLeft)}:${this.forceTwoDigits(minutesLeft)}:${this.forceTwoDigits(secondsLeft)}`
+    }, 1000);
+  }
+
+  forceTwoDigits(value: number) {
+    return value < 10 ? "0" + value : value;
   }
 }

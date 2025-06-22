@@ -1,11 +1,16 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { ArtistService } from '../../service/artist/artist.service';
 import { Artist } from '../../model/artist.model';
 import { CommonModule, DatePipe } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
 import { FormsModule } from '@angular/forms';
 import { GameResult } from '../../model/game-result.model';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { CardModule } from 'primeng/card';
+import { Tier, GAME_TIERS } from '../../model/tier.model';
+import { AnalyticsService } from '../../service/analytics/analytics.service';
 
 @Component({
     selector: 'game-page',
@@ -14,10 +19,14 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
         CommonModule,
         InputTextModule,
         FormsModule,
-        AutoCompleteModule
+        AutoCompleteModule,
+        CardModule,
+        DialogModule,
+        ButtonModule
     ],
     templateUrl: './game-page.component.html',
-    styleUrl: './game-page.component.scss'
+    styleUrl: './game-page.component.scss',
+    encapsulation: ViewEncapsulation.None
 })
 
 export class GamePageComponent implements OnInit {
@@ -25,20 +34,26 @@ export class GamePageComponent implements OnInit {
   @Input() dailyArtist: Artist;
   @Output() gameEnd = new EventEmitter<GameResult>();
 
-  MAX_GUESSES = 5;
-  NUM_TO_WIN = 3;
-
   artistSongs: string[];
 
   guessText: string;
+
+  lives = 3;
+  currTier: Tier;
+  numOfCorrectGuesses = 0;
+  guessesUntilNextTier: number;
+  endlessMode = false;
+
   guesses: string[] = [];
   guessResults: number[] = [];
 
   autoSuggestions: string[];
 
+  modalVisible = false;
+
   constructor(
     private artistService: ArtistService,
-    private datePipe: DatePipe
+    private analyticsService: AnalyticsService
   ) {}
 
   ngOnInit(): void {
@@ -47,59 +62,104 @@ export class GamePageComponent implements OnInit {
 
   initGame() {
     this.getSongList();
+    this.calculateTier();
   }
 
   getSongList() {
     this.artistService.getTopSongs(this.dailyArtist.name)
       .subscribe((songs) => {
-        console.log(songs);
         this.artistSongs = songs;
       });
   }
 
   fillAutoComplete(event: any) {
-    console.log(event);
-    this.artistService.searchSongs(event.query).subscribe((songs) => {
-      console.log(songs);
-      this.autoSuggestions = songs;
-    })
+    if (event.query.toLowerCase() != this.dailyArtist.name.toLowerCase()) {
+      this.artistService.searchSongs(event.query).subscribe((songs) => {
+        this.autoSuggestions = songs;
+      })
+    } else {
+      this.autoSuggestions = [];
+    }
   }
 
   guessSong() {
-    console.log(this.guessText);
-
     const song = this.artistSongs.find((song) => song == this.guessText);
 
-    if (song) {
-      this.guesses.push(song);
-      this.guessResults.push(1);
+    if (!this.guesses.includes(this.guessText)) {
+      // Correct Guess
+      if (song) {
+        this.guesses.push(song);
+        this.guessResults.push(1);
+        this.numOfCorrectGuesses++;
+
+        if (this.numOfCorrectGuesses == 3) {
+          this.analyticsService.userWon();
+        }
+      // Incorrect Guess
+      } else {
+        this.guesses.push(this.guessText);
+        this.guessResults.push(0);
+        this.lives--;
+      }
     } else {
-      this.guesses.push(this.guessText);
-      this.guessResults.push(0);
+      this.guessText = "";
+      return;
     }
 
     this.guessText = "";
+    if (!this.endlessMode) {
+      this.calculateTier();
+    }
     this.validateGameEnd();
   }
 
   validateGameEnd() {
-    let numOfWins = 0;
-    this.guessResults.forEach((value) => {
-      if (value) {
-        numOfWins++;
-      }
-    });
+    if (this.lives == 0) {
+      this.endGame();
+    }
+  }
 
-    const gameResult: GameResult = {
-      win: true,
-      guessResults: this.guessResults
+  calculateTier() {
+    let nextTier;
+    for (let i = 0; i < GAME_TIERS.length; i++) {
+      if (this.numOfCorrectGuesses < GAME_TIERS[i].value) {
+        this.currTier = GAME_TIERS[i-1];
+        nextTier = GAME_TIERS[i];
+        break;
+      } else if (i == GAME_TIERS.length - 1) {
+        this.currTier = GAME_TIERS[i];
+        this.endlessMode = true;
+        this.modalVisible = true;
+        break;
+      }
     }
 
-    if (numOfWins == this.NUM_TO_WIN) {
+    if (nextTier) {
+      this.guessesUntilNextTier = nextTier.value - this.numOfCorrectGuesses;
+    }
+  }
+
+  endGame() {
+    const gameResult: GameResult = {
+      win: true,
+      numberOfCorrectGuesses: this.numOfCorrectGuesses,
+      tier: this.currTier
+    }
+
+    if (this.numOfCorrectGuesses >= GAME_TIERS[1].value) {
       this.gameEnd.emit(gameResult);
-    } else if (this.guesses.length == this.MAX_GUESSES) {
+    } else {
       gameResult.win = false;
       this.gameEnd.emit(gameResult);
     }
+  }
+
+  clickGiveUp() {
+    this.analyticsService.userGaveUp();
+    this.endGame();
+  }
+
+  showModal(value: boolean) {
+    this.modalVisible = value;
   }
 }

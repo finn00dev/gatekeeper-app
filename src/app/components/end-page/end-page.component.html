@@ -1,6 +1,58 @@
-<div *ngIf="result.win; else lossScreen">
-    WIN
+<div class="container">
+	<div *ngIf="!showStats">
+		<div *ngIf="result.win; else lossScreen">
+			<h1 class="end-prompt">Fine, you can wear their merch.</h1>
+		
+			<h3 class="end-stat">You reached {{ result.tier.title }} status</h3>
+		</div>
+		<ng-template #lossScreen>
+			<h1 class="end-prompt">Hand over the band tee.</h1>
+		
+			<h3 class="end-stat">You couldn't guess 3 songs</h3>
+		</ng-template>
+
+		<div class="score-section">
+			<h6 class="date">Score: {{ currentDate }}</h6>
+			<span class="tier">{{ emojiScore }}</span>
+			<span class="countdown">Next gatekeepr in <span class="timer">{{ countdown }}</span></span>
+		</div>
+
+		<p-button 
+			styleClass="share-button"
+			(click)="shareScore()"
+			label="Share"/>
+		<p-button 
+			styleClass="stats-button"
+			(click)="openStats(true)"
+			label="Statistics"/>
+	</div>
+
+	<div *ngIf="showStats" #statsSection>
+		<div class="statistics">
+			<div class="statistics-header">
+				<i class="pi pi-arrow-left" style="font-size: 1.25rem" (click)="openStats(false)"></i>
+				<h6 class="title">Game Statistics</h6>
+				<span style="width: 20px;"></span>
+			</div>
+			<div class="stats-grid">
+				<div class="stats-grid-item">
+					<p class="value">{{ userStatistics.currentStreak }}🔥</p>
+					<p>Current Streak</p>
+				</div>
+				<div class="stats-grid-item">
+					<p class="value">{{ userStatistics.highestStreak }}</p>
+					<p>Highest Streak</p>
+				</div>
+				<div class="stats-grid-item">
+					<p class="value">{{ userStatistics.highScore }}</p>
+					<p>High Score</p>
+				</div>
+			</div>
+			<h6 class="blurb">
+				You have faced gatekeepr <span class="highlight1">{{ userStatistics.gamesTotal }} times</span>,
+				winning <span class="highlight2">{{ userStatistics.winRate | percent: '1.0' }} of the time</span>
+			</h6>
+		</div>
+	</div>
+
 </div>
-<ng-template #lossScreen>
-    LOSE
-</ng-template>

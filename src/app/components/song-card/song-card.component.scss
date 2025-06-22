@@ -1,0 +1,42 @@
+.song-container {
+    display: flex;
+    align-items: center;
+
+    margin-bottom: 10px;
+
+    .list-number {
+		color: #238380;
+		font-size: 28px;
+		width: 24px !important;
+	}
+
+    p-card {
+        display: inline;
+        width: 100%;
+    }
+
+    .song-title {
+        display: inline;
+        margin-left: 10px;
+        color: #238380;
+        line-height: 100%;
+    }
+
+	.song-card {
+		font-size: 18px;
+		text-overflow: ellipsis;
+		.p-card-body {
+			padding: 10px;
+		}
+	}
+
+	.song-card-empty {
+        height: 48px;
+        border: 3px solid #ACA8A8;
+        background: linear-gradient(180deg, rgba(245,246,184,1) 0%, rgba(187,186,186,1) 100%);
+
+		.p-card-body {
+			padding: 10px;
+		}
+	}
+}

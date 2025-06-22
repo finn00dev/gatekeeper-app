@@ -1,19 +1,67 @@
-<div *ngIf="dailyArtist">
-  {{dailyArtist.name}}
+<div class="container">
+	<div class="tier" [style.background-color]="currTier.color">
+		<p>Tier: {{ this.currTier.title }}</p>
+	</div>
+
+	<h6 *ngIf="dailyArtist" class="name-songs-title">
+		Name {{dailyArtist.name}} Songs.
+	</h6>
+
+	<div class="guess-status">
+		<div class="lives-container">
+			<p class="lives-container__label">Lives:</p>
+			<p class="lives-container__hearts">{{ "❤️".repeat(lives)}}</p>
+		</div>
+		<div class="tier-status-container" *ngIf="!endlessMode">
+			<p class="tier-status-container__label">Next Tier in</p>
+			<p class="tier-status-container__value">{{ guessesUntilNextTier }} Songs</p>
+		</div>
+		<div class="tier-status-container" *ngIf="endlessMode">
+			<p class="tier-status-container__label">Score:</p>
+			<p class="tier-status-container__value">{{ numOfCorrectGuesses }} Songs</p>
+		</div>
+	</div>
+
+	<div class="guess-input-container">
+		<p class="guess-input-container__label">Enter Guesses Here</p>
+		<p-autocomplete 
+			[(ngModel)]="guessText"
+			styleClass="guess-input"
+			[delay]="1000" 
+			[suggestions]="autoSuggestions" 
+			(completeMethod)="fillAutoComplete($event)"
+			(onSelect)="guessSong()"/>
+	</div>
+	
+	<div class="guess-list" *ngIf="guesses.length">
+		<p class="guess-list__label">Guesses:</p>
+		<div *ngFor="let value of guessResults; index as i" class="guess-list-item">
+			<p-card styleClass="song-card">
+				<span>{{ value ? "✅" : "❌"}}</span>
+				<p class="song-title"> {{ guesses[i] }}</p>
+			</p-card>
+		</div>
+	</div>
+
+	<div class="give-up-container" (click)="clickGiveUp()">
+		<h6 class="label">Give Up?</h6>
+	</div>
 </div>
 
-<div *ngFor="let value of guessResults; index as i">
-	<p *ngIf="value">✅</p>
-	<p *ngIf="!value">❌</p>
-	<p>
-			{{ guesses[i] }}
-	</p>
-</div>
-
-<!-- <input type="text" pInputText [(ngModel)]="guessText" (keydown.enter)="guessSong()"/> -->
-<p-autocomplete 
-	[(ngModel)]="guessText"
-	[delay]="1000" 
-	[suggestions]="autoSuggestions" 
-	(completeMethod)="fillAutoComplete($event)"
-	(onSelect)="guessSong()"/>
+<p-dialog maskStyleClass="modal-blur" [(visible)]="modalVisible" styleClass="end-game-modal" modal="true">
+	<ng-template #headless>
+			<div class="modal-container">
+				<h1 class="title">You Won!</h1>
+				<p class="blurb">{{ `Congratulations, you reached the final tier of gatekeepr, ${currTier.title}. You correctly guessed ${currTier.value} ${dailyArtist.name } songs.` }}</p>
+				<p-button 
+					styleClass="button-1"
+					(click)="endGame()"
+					label="Finish"/>
+				<h6 
+					class="button-2"
+					(click)="showModal(false)">
+					Keep Going!
+				</h6>
+			</div>
+	</ng-template>
+</p-dialog>

@@ -1,1 +1,101 @@
 /* You can add global styles to this file, and also import other style files */
+@import "primeicons/primeicons.css";
+
+@font-face {
+  font-family: Rakkas;
+  src: url("./assets/fonts/Rakkas-Regular.ttf") format("truetype");
+}
+
+html {
+  background-color: #FFD99B;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  display: block;
+}
+
+p-button {
+  width: 100%
+}
+
+h1, 
+h2, 
+h3, 
+h4, 
+h5, 
+h6, 
+p, 
+span {
+	font-family: "Rakkas", serif;
+	font-style: normal;
+}
+
+/**
+ * ----------------------------------------
+ * animation slide-right
+ * ----------------------------------------
+ */
+@-webkit-keyframes slide-right {
+  0% {
+    -webkit-transform: translateX(-100px);
+            transform: translateX(-100px);
+            opacity: 0%;
+  }
+  100% {
+    -webkit-transform: translateX(0px);
+            transform: translateX(0px);
+            opacity: 100%;
+  }
+}
+@keyframes slide-right {
+  0% {
+    -webkit-transform: translateX(-100px);
+            transform: translateX(-100px);
+            opacity: 0%;
+  }
+  100% {
+    -webkit-transform: translateX(0px);
+            transform: translateX(0px);
+            opacity: 100%;
+  }
+}
+
+/**
+ * ----------------------------------------
+ * animation fade-in
+ * ----------------------------------------
+ */
+ @-webkit-keyframes swipe-up {
+  0% {
+    opacity: 0%;
+  }
+  100% {
+    opacity: 100%;
+  }
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0%;
+  }
+  100% {
+    opacity: 100%;
+  }
+}
+
+/**
+ * ----------------------------------------
+ * animation swipe-up
+ * ----------------------------------------
+ */
+ @-webkit-keyframes swipe-up {
+  50% {
+    transform: translateY(20px);
+  }
+}
+@keyframes swipe-up {
+  50% {
+    transform: translateY(20px);
+  }
+}

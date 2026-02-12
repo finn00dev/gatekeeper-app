@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { ArtistService } from '../../service/artist/artist.service';
-import { Artist } from '../../model/artist.model';
 import { CommonModule, DatePipe } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
@@ -31,7 +30,7 @@ import { AnalyticsService } from '../../service/analytics/analytics.service';
 
 export class GamePageComponent implements OnInit {
 
-  @Input() dailyArtist: Artist;
+  @Input() dailyArtist: string;
   @Output() gameEnd = new EventEmitter<GameResult>();
 
   artistSongs: string[];
@@ -66,14 +65,14 @@ export class GamePageComponent implements OnInit {
   }
 
   getSongList() {
-    this.artistService.getTopSongs(this.dailyArtist.name)
+    this.artistService.getTopSongs(this.dailyArtist)
       .subscribe((songs) => {
         this.artistSongs = songs;
       });
   }
 
   fillAutoComplete(event: any) {
-    if (event.query.toLowerCase() != this.dailyArtist.name.toLowerCase()) {
+    if (event.query.toLowerCase() != this.dailyArtist.toLowerCase()) {
       this.artistService.searchSongs(event.query).subscribe((songs) => {
         this.autoSuggestions = songs;
       })

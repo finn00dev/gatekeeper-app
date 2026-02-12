@@ -3,7 +3,6 @@ import { GamePageComponent } from '../game-page/game-page.component';
 import { GameResult } from '../../model/game-result.model';
 import { CommonModule, DatePipe } from '@angular/common';
 import { EndPageComponent } from "../end-page/end-page.component";
-import { Artist } from '../../model/artist.model';
 import { ArtistService } from '../../service/artist/artist.service';
 import { GameState } from '../../model/game-state.model';
 import { StartPageComponent } from '../start-page/start-page.component';
@@ -29,20 +28,20 @@ export class GameRootComponent {
 	gameState: GameState = GameState.Start;
 	gameResults: GameResult;
 
-	dailyArtist: Artist
+	dailyArtist: string
 
 	constructor(
 		private artistService: ArtistService,
-		private datePipe: DatePipe,
 		private cookieService: CookieService,
 		private statisticsService: StatisticsService
 	) {}
 
 	ngOnInit(): void {
 		this.isCookiePresent();
-		this.artistService.getTopArtists()
-		.subscribe((artists) => {
-			this.getDailyArtist(artists);
+		const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+		this.artistService.getTodaysArtist(timezone)
+		.subscribe((artistName) => {
+			this.dailyArtist = artistName;
 		});
 	}
 	
@@ -54,12 +53,6 @@ export class GameRootComponent {
 			return true;
 		}
 		return false
-	}
-
-	getDailyArtist(artists: Artist[]) {
-		const date = new Date();
-		const dateString = this.datePipe.transform(date, 'yyyyMMdd') || '';
-		this.dailyArtist = artists[+dateString % artists.length];
 	}
 
 	navigateToGame() {

@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "/dist/gatekeeper-app/browser",
+    "public": "dist/gatekeeper-app/browser",
     "ignore": [
       "firebase.json",
       "**/.*",

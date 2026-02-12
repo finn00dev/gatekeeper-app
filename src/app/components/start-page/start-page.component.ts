@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { Artist } from '../../model/artist.model';
 
 @Component({
   selector: 'start-page',
@@ -13,7 +12,7 @@ import { Artist } from '../../model/artist.model';
 })
 export class StartPageComponent {
 
-  @Input() dailyArtist: Artist;
+  @Input() dailyArtist: string;
   @Output() startGame = new EventEmitter<number>();
 
   clickStart() {

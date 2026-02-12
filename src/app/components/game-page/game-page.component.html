@@ -4,7 +4,7 @@
 	</div>
 
 	<h6 *ngIf="dailyArtist" class="name-songs-title">
-		Name {{dailyArtist.name}} Songs.
+		Name {{dailyArtist}} Songs.
 	</h6>
 
 	<div class="guess-status">
@@ -52,7 +52,7 @@
 	<ng-template #headless>
 			<div class="modal-container">
 				<h1 class="title">You Won!</h1>
-				<p class="blurb">{{ `Congratulations, you reached the final tier of gatekeepr, ${currTier.title}. You correctly guessed ${currTier.value} ${dailyArtist.name } songs.` }}</p>
+				<p class="blurb">{{ `Congratulations, you reached the final tier of gatekeepr, ${currTier.title}. You correctly guessed ${currTier.value} ${dailyArtist } songs.` }}</p>
 				<p-button 
 					styleClass="button-1"
 					(click)="endGame()"

@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { ArtistService } from '../../service/artist/artist.service';
-import { Artist } from '../../model/artist.model';
 import { CommonModule, DatePipe } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
@@ -31,10 +30,8 @@ import { AnalyticsService } from '../../service/analytics/analytics.service';
 
 export class GamePageComponent implements OnInit {
 
-  @Input() dailyArtist: Artist;
+  @Input() dailyArtist: string;
   @Output() gameEnd = new EventEmitter<GameResult>();
-
-  artistSongs: string[];
 
   guessText: string;
 
@@ -61,20 +58,12 @@ export class GamePageComponent implements OnInit {
   }
 
   initGame() {
-    this.getSongList();
     this.calculateTier();
   }
 
-  getSongList() {
-    this.artistService.getTopSongs(this.dailyArtist.name)
-      .subscribe((songs) => {
-        this.artistSongs = songs;
-      });
-  }
-
   fillAutoComplete(event: any) {
-    if (event.query.toLowerCase() != this.dailyArtist.name.toLowerCase()) {
-      this.artistService.searchSongs(event.query).subscribe((songs) => {
+    if (event.query.toLowerCase() != this.dailyArtist.toLowerCase()) {
+      this.artistService.getSuggestions(event.query).subscribe((songs) => {
         this.autoSuggestions = songs;
       })
     } else {
@@ -83,34 +72,33 @@ export class GamePageComponent implements OnInit {
   }
 
   guessSong() {
-    const song = this.artistSongs.find((song) => song == this.guessText);
-
     if (!this.guesses.includes(this.guessText)) {
-      // Correct Guess
-      if (song) {
-        this.guesses.push(song);
-        this.guessResults.push(1);
-        this.numOfCorrectGuesses++;
+      this.artistService.checkGuess(this.dailyArtist, this.guessText)
+        .subscribe((isCorrect) => {
+          if (isCorrect) {
+            this.guesses.push(this.guessText);
+            this.guessResults.push(1);
+            this.numOfCorrectGuesses++;
 
-        if (this.numOfCorrectGuesses == 3) {
-          this.analyticsService.userWon();
-        }
-      // Incorrect Guess
-      } else {
-        this.guesses.push(this.guessText);
-        this.guessResults.push(0);
-        this.lives--;
-      }
+            if (this.numOfCorrectGuesses == 3) {
+              this.analyticsService.userWon();
+            }
+          } else {
+            this.guesses.push(this.guessText);
+            this.guessResults.push(0);
+            this.lives--;
+          }
+
+          this.guessText = "";
+          if (!this.endlessMode) {
+            this.calculateTier();
+          }
+          this.validateGameEnd();
+        });
     } else {
       this.guessText = "";
       return;
     }
-
-    this.guessText = "";
-    if (!this.endlessMode) {
-      this.calculateTier();
-    }
-    this.validateGameEnd();
   }
 
   validateGameEnd() {

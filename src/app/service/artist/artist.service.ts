@@ -24,9 +24,9 @@ export class ArtistService {
     );
   }
 
-  getTopSongs(artistName: string): Observable<string[]> {
-    const getTopSongsCallable = httpsCallableData<{artistName: string}, {data: string[]}>(this.functions, 'getTopSongs');
-    return getTopSongsCallable({artistName}).pipe(
+  getSuggestions(searchTerm: string): Observable<string[]> {
+    const getSuggestionsCallable = httpsCallableData<{searchTerm: string}, {data: string[]}>(this.functions, 'getSuggestions');
+    return getSuggestionsCallable({searchTerm}).pipe(
       map((result) => result.data),
       catchError((err) => {
         this.router.navigate(['/error']);
@@ -34,14 +34,14 @@ export class ArtistService {
       })
     );
   }
-  
-  searchSongs(searchTerm: string): Observable<string[]> {
-    const searchSongsCallable = httpsCallableData<{searchTerm: string}, {data: string[]}>(this.functions, 'searchSongs');
-    return searchSongsCallable({searchTerm}).pipe(
+
+  checkGuess(artistName: string, songName: string): Observable<boolean> {
+    const checkGuessCallable = httpsCallableData<{artistName: string; songName: string}, {data: boolean}>(this.functions, 'checkGuess');
+    return checkGuessCallable({artistName, songName}).pipe(
       map((result) => result.data),
       catchError((err) => {
         this.router.navigate(['/error']);
-        return of([]);
+        return of(false);
       })
     );
   }

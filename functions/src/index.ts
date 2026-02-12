@@ -81,54 +81,80 @@ export const getTodaysArtist = onCall({secrets: [LASTFM_API_KEY_SECRET]}, async 
   }
 });
 
-export const getTopSongs = onCall({secrets: [LASTFM_API_KEY_SECRET]}, async (request) => {
+export const checkGuess = onCall({secrets: [LASTFM_API_KEY_SECRET]}, async (request) => {
   const artistName = request.data.artistName;
+  const songName = request.data.songName;
 
-  if (!artistName) {
-    throw new functions.https.HttpsError("invalid-argument", "Artist name is required");
+  if (!artistName || typeof artistName !== "string") {
+    throw new functions.https.HttpsError("invalid-argument", "artistName is required");
+  }
+
+  if (!songName || typeof songName !== "string") {
+    throw new functions.https.HttpsError("invalid-argument", "songName is required");
   }
 
   try {
     const apiKey = getLastFmApiKey();
     if (!apiKey) {
-      throw new functions.https.HttpsError("failed-precondition", "Last.fm API key is not configured");
+      throw new functions.https.HttpsError(
+        "failed-precondition",
+        "Last.fm API key is not configured",
+      );
     }
 
-    const response = await axios.get(`${LASTFM_API_URL}?method=artist.gettoptracks&artist=${encodeURIComponent(artistName)}&api_key=${apiKey}&format=json&limit=250`);
+    const response = await axios.get(
+      `${LASTFM_API_URL}?method=artist.gettoptracks&artist=${encodeURIComponent(artistName)}&api_key=${apiKey}&format=json&limit=250`,
+    );
 
-    const songs = response.data.toptracks?.track || [];
-    const songNames = songs.map((song: any) => song.name);
+    const tracks = response.data.toptracks?.track || [];
+    const normalizedGuess = songName.trim();
 
-    // Return only song names to prevent exposing full track data
-    return {data: songNames};
+    const isCorrect = tracks.some((track: any) => {
+      const name = (track?.name ?? "").toString().trim();
+      return name === normalizedGuess;
+    });
+
+    return {data: isCorrect};
   } catch (error) {
-    logger.error("Error in getTopSongs:", error);
-    throw new functions.https.HttpsError("internal", "Failed to get songs");
+    logger.error("Error in checkGuess:", error);
+    throw new functions.https.HttpsError("internal", "Failed to check guess");
   }
 });
 
-export const searchSongs = onCall({secrets: [LASTFM_API_KEY_SECRET]}, async (request) => {
+export const getSuggestions = onCall({secrets: [LASTFM_API_KEY_SECRET]}, async (request) => {
   const searchTerm = request.data.searchTerm;
 
-  if (!searchTerm) {
-    throw new functions.https.HttpsError("invalid-argument", "Search term is required");
+  if (!searchTerm || typeof searchTerm !== "string") {
+    throw new functions.https.HttpsError("invalid-argument", "searchTerm is required");
   }
 
   try {
     const apiKey = getLastFmApiKey();
     if (!apiKey) {
-      throw new functions.https.HttpsError("failed-precondition", "Last.fm API key is not configured");
+      throw new functions.https.HttpsError(
+        "failed-precondition",
+        "Last.fm API key is not configured",
+      );
     }
 
-    const response = await axios.get(`${LASTFM_API_URL}?method=track.search&track=${encodeURIComponent(searchTerm)}&api_key=${apiKey}&format=json&limit=6`);
+    const response = await axios.get(
+      `${LASTFM_API_URL}?method=track.search&track=${encodeURIComponent(searchTerm)}&api_key=${apiKey}&format=json&limit=6`,
+    );
 
     const songs = response.data.results?.trackmatches?.track || [];
     const songNames = songs.map((song: any) => song.name);
 
-    // Return only song names to prevent exposing full track data
-    return {data: songNames};
+    const seen = new Set<string>();
+    const dedupedSongNames = songNames.filter((name: unknown) => {
+      if (typeof name !== "string") return false;
+      if (seen.has(name)) return false;
+      seen.add(name);
+      return true;
+    });
+
+    return {data: dedupedSongNames};
   } catch (error) {
-    logger.error("Error in searchSongs:", error);
-    throw new functions.https.HttpsError("internal", "Failed to search songs");
+    logger.error("Error in getSuggestions:", error);
+    throw new functions.https.HttpsError("internal", "Failed to get suggestions");
   }
 });

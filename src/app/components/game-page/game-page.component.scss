@@ -48,7 +48,7 @@
 	.lives-container {
 		text-align: center;
 		&__label {
-			color: #238380;
+			color: #166461;
 			font-size: 18px;
 			margin: 0px 0px -5px 0px;
 		}
@@ -60,7 +60,7 @@
 
 	.tier-status-container {
 		text-align: left;
-		color: #238380;
+		color: #166461;
 		font-size: 18px;
 
 		&__label {
@@ -80,7 +80,7 @@
 	max-width: 350px;
 	width: 100%;
 	&__label {
-		color: #238380;
+		color: #166461;
 		font-size: 16px;
 		letter-spacing: 1px;
 		text-align: center;
@@ -107,7 +107,7 @@
 	max-width: 350px;
 
 	&__label {
-		color: #238380;
+		color: #166461;
 		font-size: 16px;
 		letter-spacing: 1px;
 		margin-bottom: 8px;
@@ -117,7 +117,7 @@
 		font-size: 18px;
 		text-overflow: ellipsis;
 		background-color: #ffffff78;
-		color: #238380;
+		color: #166461;
 		margin-bottom: 10px;
 
 		.p-card-body {
@@ -135,7 +135,8 @@
 }
 
 .give-up-container {
-	color: #8a9898;
+	color: #166461;
+	opacity: 0.55;
 	font-size: 24px;
 	text-align: center;
 	margin-top: 50px;

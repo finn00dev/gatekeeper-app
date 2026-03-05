@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://gate-keepr.com/sitemap.xml
+
+# Block common non-content paths
+Disallow: /api/
+Disallow: /functions/
+Disallow: /_firebase/
+Disallow: /error

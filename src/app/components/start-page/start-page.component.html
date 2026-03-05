@@ -1,10 +1,19 @@
 <div class="container">
-	<h6 class="website-title">gatekeepr</h6>
-	<p class="page-title">Oh, you're a {{ dailyArtist }} fan?</p>
-	<p class="page-title right">Name 3 songs.</p>
+	<page-header class="header"></page-header>
+	<div class="title-container">
+		<p class="page-title">Oh, you're a {{ dailyArtist }} fan?</p>
+		<p class="page-title right">Name 3 songs.</p>
+	</div>
 	
-	<p-button 
-		styleClass="begin-button"
-		label="Begin" 
-		(click)="clickStart()"/>
+	<div class="button-container">
+		<p-button 
+			styleClass="begin-button"
+			label="Begin" 
+			(click)="clickStart()"/>
+		
+		<!-- <p-button 
+			styleClass="archives-button"
+			label="Archives" 
+			(click)="clickStart()"/> -->
+	</div>
 </div>

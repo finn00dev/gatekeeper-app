@@ -1,0 +1,9 @@
+<div class="header-container">
+  <img src="/assets/images/logo.png" alt="Gatekeepr" class="logo" />
+  <div class="back-icon" *ngIf="showBackButton" (click)="onBackClick()">
+    <img src="/assets/images/back.svg" alt="Help" />
+  </div>
+  <div class="help-icon" *ngIf="!showBackButton" (click)="onHelpClick()">
+    <img src="/assets/images/help.svg" alt="Help" />
+  </div>
+</div>

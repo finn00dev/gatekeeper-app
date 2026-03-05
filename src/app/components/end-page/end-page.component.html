@@ -30,7 +30,9 @@
 	<div *ngIf="showStats" #statsSection>
 		<div class="statistics">
 			<div class="statistics-header">
-				<i class="pi pi-arrow-left" style="font-size: 1.25rem" (click)="openStats(false)"></i>
+				<div (click)="openStats(false)">
+					<img src="/assets/images/back.svg" alt="back" />
+				</div>
 				<h6 class="title">Game Statistics</h6>
 				<span style="width: 20px;"></span>
 			</div>

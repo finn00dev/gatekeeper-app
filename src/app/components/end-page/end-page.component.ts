@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
 import { GameResult } from '../../model/game-result.model';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
@@ -21,7 +21,7 @@ import { AnalyticsService } from '../../service/analytics/analytics.service';
 })
 export class EndPageComponent implements OnInit {
 
-  @Input('result') result: GameResult;
+  result: GameResult;
 
   currentDate: string = '';
   emojiScore: string;
@@ -39,6 +39,13 @@ export class EndPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const cookieValue = this.cookieService.get('todaysResult');
+    this.result = cookieValue ? JSON.parse(cookieValue) : undefined;
+
+    if (!this.result) {
+      return;
+    }
+
     this.buildDate();
     this.storeCookie();
     this.buildEmojiScore();
